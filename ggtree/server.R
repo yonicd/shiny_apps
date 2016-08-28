@@ -1,7 +1,8 @@
 library(shiny)
 library(ggplot2)
 library(shinyAce)
-
+library(dplyr)
+library(rvest)
 # recursive approach! http://stackoverflow.com/questions/12818864/how-to-write-to-json-with-children-from-r
 makeList <- function(x) {
   idx <- is.na(x[,2])
@@ -31,32 +32,32 @@ gg2tree <- function(gg) {
   list(name = "ggplot", children = makeList(m))
 }
 
+p=mtcars%>%ggplot(aes(x=mpg,y=wt,colour=vs))+geom_point()+facet_wrap(~cyl)
+
 shinyServer(function(input, output, session) {
-  
-  output$ggplot <- renderPlot({
-    input$send
-    isolate({
-      print(eval(parse(text = input$code)))
-    })
-  })
+  shinyURL.server()
   
   output$d3 <- reactive({
-    input$send
-    isolate({
-      p <- eval(parse(text = input$code))
-    })
-    return(list(root = gg2tree(p), layout = input$d3layout))
+    return(list(root = gg2tree(p), layout = 'collapse'))
   })
   
   
-  output$console <- renderPrint({
-    input$send
+  output$.table <- DT::renderDataTable(mtcars,
+                                   extensions = c('Buttons',
+                                                  'Scroller',
+                                                  'ColReorder',
+                                                  'FixedColumns'), 
+                                   filter='top',
+                                   options = list(  deferRender = TRUE,
+                                                    dom='t',
+                                                    scrollX = TRUE,
+                                                    pageLength = 50,
+                                                    scrollY = 500,
+                                                    scroller = TRUE,
+                                                    dom = 'Bfrtip',
+                                                    colReorder=TRUE,
+                                                    fixedColumns = TRUE,
+                                                    buttons = c('copy', 'csv', 'excel', 'pdf', 'print','colvis')
+                                   ))
     
-    isolate({
-      p <- eval(parse(text = input$code))
-      return(gg2tree(p))
-    })
-    
-  })
-  
 })
