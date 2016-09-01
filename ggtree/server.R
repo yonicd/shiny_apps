@@ -32,13 +32,14 @@ shinyServer(function(input, output, session) {
                       fixedColumns = TRUE,
                       buttons = c('copy', 'csv', 'excel', 'pdf', 'print','colvis'))
   )
-  
+
   output$results <- renderPrint({
     str.out=''
     if(!is.null(input$nodesData)) str.out=tree.filter(input$nodesData,m)
     return(str.out)
   })
   
+
   output$Hierarchy <- renderUI({
     nm=names(m)
     ch=c("Study","Category","Variable")
@@ -46,4 +47,5 @@ shinyServer(function(input, output, session) {
     selectInput("Hierarchy","Tree Hierarchy",choices = Hierarchy,multiple=T,selected = Hierarchy)
   })
   
+
 })
