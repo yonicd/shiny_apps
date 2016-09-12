@@ -166,8 +166,8 @@ $.extend(d3OutputBinding, {
 			  
 			       //return data to shiny
 			       var nodes1 = tree.nodes(root);
-            Shiny.onInputChange("nodesData", JSON.decycle(nodes1));
-            Shiny.onInputChange("linksData", JSON.decycle(links));
+            Shiny.onInputChange(".nodesData", JSON.decycle(nodes1));
+            Shiny.onInputChange(".linksData", JSON.decycle(links));
             
 			} // end of update() function
 

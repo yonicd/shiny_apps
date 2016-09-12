@@ -8,6 +8,11 @@ shinyUI(fluidPage(
     tags$link(rel = 'stylesheet', type = 'text/css', href = 'ggtree.css')
   ),
   
+  sidebarLayout(
+    sidebarPanel(
+      shinyURL.ui(ZeroClipboard.swf = "//cdn.jsdelivr.net/zeroclipboard/2.2.0/ZeroClipboard.swf")
+    ),
+    
   mainPanel(
     tabsetPanel(
       tabPanel("Layout Tree Filter",  
@@ -24,7 +29,7 @@ shinyUI(fluidPage(
                fluidPage(
                  fluidRow(
                    column(12,
-                          DT::dataTableOutput('table')
+                          DT::dataTableOutput('.table')
                    )
                  )
                )
@@ -32,4 +37,4 @@ shinyUI(fluidPage(
     )
   )
 )
-)
+))

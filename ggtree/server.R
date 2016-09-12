@@ -1,19 +1,20 @@
 shinyServer(function(input, output, session) {
+  shinyURL.server()
   
   observe({
-    nodesList<<-input$nodesData
+    nodesList<<-input$.nodesData
   })
   
   output$d3 <- reactive({
     p=m%>%select(one_of(c(input$Hierarchy,"value")))%>%unique
     list(root = df2tree(p), layout = 'collapse')})
   
-  output$table <- DT::renderDataTable(expr = {
+  output$.table <- DT::renderDataTable(expr = {
     df=m
-    if(is.null(input$nodesData)){
+    if(is.null(input$.nodesData)){
       df=m
     }else{
-      x.filter=tree.filter(input$nodesData,m)
+      x.filter=tree.filter(input$.nodesData,m)
       if(!is.null(x.filter)) df=ddply(x.filter,.(id),function(a.x){m%>%filter_(.dots = list(a.x$x2))%>%distinct})
     }
     df=df%>%select(-c(id,value))%>%mutate_each(funs(factor))
@@ -35,14 +36,14 @@ shinyServer(function(input, output, session) {
 
   output$results <- renderPrint({
     str.out=''
-    if(!is.null(input$nodesData)) str.out=tree.filter(input$nodesData,m)
+    if(!is.null(input$.nodesData)) str.out=tree.filter(input$.nodesData,m)
     return(str.out)
   })
   
 
   output$Hierarchy <- renderUI({
     nm=names(m)
-    ch=c("Study","Category","Variable")
+    ch=c("Cylinders","VS","AM","Carborators")
     Hierarchy=split(nm[-length(nm)],factor(ch,levels=ch))
     selectInput("Hierarchy","Tree Hierarchy",choices = Hierarchy,multiple=T,selected = Hierarchy)
   })

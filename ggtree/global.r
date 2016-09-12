@@ -1,8 +1,7 @@
 library(shiny)
-library(ggplot2)
-library(shinyAce)
 library(stringr)
 library(DT)
+library(shinyURL)
 library(plyr)
 library(dplyr)
 
@@ -14,7 +13,6 @@ makeList <- function(x) {
     lapply(names(listSplit), function(y){list(name = y, value = names(x)[1], children = makeList(listSplit[[y]]))})
   } else {
     nms <- x[,1]
-    #lapply(seq_along(nms), function(y){list(name = nms[y], value = paste(names(x)[1],x[,"value"][y],sep="="))})
     lapply(seq_along(nms), function(y){list(name = nms[y], value = names(x)[1])})
   }
 }
@@ -77,6 +75,6 @@ tree.filter=function(nodesList,m){
   return(active_filter)
 }
 
-m=read.csv('ghap_struct.csv',header = T,stringsAsFactors = F)%>%mutate(value=NA)%>%rename(STUDY=var_study,VARIABLE=var_name,CATEGORY=category)%>%select(STUDY,CATEGORY,VARIABLE,value)
-  
+#m=read.csv('ghap_struct.csv',header = T,stringsAsFactors = F)%>%mutate(value=NA)%>%rename(STUDY=var_study,VARIABLE=var_name,CATEGORY=category)%>%select(STUDY,CATEGORY,VARIABLE,value)
+m=mtcars%>%select(cyl,vs,am,carb)%>%mutate(value=NA)%>%distinct
 nodesList=list()
